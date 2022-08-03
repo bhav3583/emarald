@@ -36,7 +36,7 @@ public class MyStepdefs {
 
     @When("^I click on last week link in year filter$")
     public void iClickOnLastWeekLinkInYearFilter() {
-        marketingPages.clickOnLastWeekLink();
+       // marketingPages.clickOnLastWeekLink();
 
     }
 

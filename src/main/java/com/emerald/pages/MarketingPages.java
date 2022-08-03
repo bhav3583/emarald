@@ -63,7 +63,7 @@ public class MarketingPages extends Utility {
         }
         System.out.println("Result before sorting " + dateList);
         Collections.sort(dateList);
-        System.out.println("Result after sorting "+dateList);
+        System.out.println("Result after sorting " + dateList);
         dateAfterSortList.addAll(dateList);
         Assert.assertEquals(dateList, dateAfterSortList);
 
@@ -83,7 +83,6 @@ public class MarketingPages extends Utility {
         System.out.println("endDate : " + endDate);
 
 
-
         DateRangeValidator checker = new DateRangeValidator(startDate, endDate);
         //List<String> dateList = new ArrayList<>();
         for (WebElement date : publicationDate) {
@@ -100,8 +99,6 @@ public class MarketingPages extends Utility {
                 System.out.println("testDate is NOT within the date range.");
             }
         }
-
-
     }
 
     public void clickOnLastWeekLink() {
@@ -109,20 +106,49 @@ public class MarketingPages extends Utility {
     }
 
     public void verifyPublicationByWeek() {
+
         ArrayList<String> beforeList = new ArrayList<>();
         for (WebElement week : publicationDate) {
             beforeList.add(week.getText());
         }
-        System.out.println(beforeList);
+        System.out.println("List of date before clicking last week"+beforeList);
         clickOnElement(week);
 
-        List<WebElement> afterList = new LinkedList<>();
+        List<String> afterList = new LinkedList<>();
         for (WebElement a : publicationDate) {
-            afterList.add(a);
-            System.out.println(afterList);
-        }
+            afterList.add(a.getText());
 
-        Assert.assertEquals(beforeList, afterList);
+        }
+        System.out.println("List of date after clicking last week"+afterList);
+        Collections.sort(afterList);
+        System.out.println("List of date After sorting "+ afterList);
+
+        Calendar calendar = Calendar.getInstance();
+        String currentDate = new SimpleDateFormat("dd MMMM yyyy").format(calendar.getTime());
+        calendar.add(Calendar.DAY_OF_WEEK, -7);
+        String pastDate = new SimpleDateFormat("dd MMMM yyyy").format(calendar.getTime());
+
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd MMMM yyyy");
+        LocalDate startDate = LocalDate.parse(pastDate, dtf);
+        LocalDate endDate = LocalDate.parse(currentDate, dtf);
+
+        System.out.println("startDate : " + startDate);
+        System.out.println("endDate : " + endDate);
+
+
+        DateRangeValidator checker = new DateRangeValidator(startDate, endDate);
+
+        for (String date : afterList) {
+            String actualD = date;
+            LocalDate testDate = LocalDate.parse(actualD, dtf);
+            System.out.println("testDate : " + testDate);
+
+            if (checker.isWithinRange(testDate)) {
+                System.out.println("testDate is within the date range.");
+            } else {
+                System.out.println("testDate is NOT within the date range.");
+            }
+        }
 
     }
 
